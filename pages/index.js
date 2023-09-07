@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import postsData from "../data/blog.json";
-import BlogCard from "./components/BlogCard";
+import BlogCard from "./card";
 
 export default function BlogList({ initialPosts }) {
   const [blogs, setBlogs] = useState(initialPosts);
@@ -8,34 +8,27 @@ export default function BlogList({ initialPosts }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
-  const [blogImages, setBlogImages] = useState(() => {
-    const initialImages = initialPosts.reduce((acc, blog) => {
-      acc[blog.id] = blog.imageUrl;
-      return acc;
-    }, {});
-    return initialImages;
-  });
+  const [blogImages, setBlogImages] = useState({});
 
-  const fetchBlogs = () => {
-    let filteredPosts = postsData.posts;
+  const fetchBlogs = async () => {
+    let endpoint = "/api/posts";
+
     if (searchTerm) {
-      filteredPosts = filteredPosts.filter((post) =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      endpoint = `/api/search?term=${searchTerm}`;
+    } else if (category) {
+      endpoint = `/api/filter?category=${category}`;
     }
-    if (category) {
-      filteredPosts = filteredPosts.filter((post) =>
-        post.categories.includes(parseInt(category, 10))
-      );
-    }
-    setBlogs(filteredPosts.slice(currentPage * 12, (currentPage + 1) * 12));
-    const initialImages = filteredPosts.reduce((acc, blog) => {
+
+    const response = await fetch(endpoint);
+    const data = await response.json();
+
+    setBlogs(data.slice(currentPage * 12, (currentPage + 1) * 12));
+    const initialImages = data.reduce((acc, blog) => {
       acc[blog.id] = blog.imageUrl;
       return acc;
     }, {});
     setBlogImages(initialImages);
   };
-
   useEffect(() => {
     fetchBlogs();
     setCategories([
@@ -105,11 +98,12 @@ export default function BlogList({ initialPosts }) {
     </div>
   );
 }
-
 export async function getServerSideProps() {
+  const res = await fetch("http://localhost:3000/api/posts");
+  const data = await res.json();
   return {
     props: {
-      initialPosts: postsData.posts.slice(0, 9),
+      initialPosts: data.slice(0, 9),
     },
   };
 }
