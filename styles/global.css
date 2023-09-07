@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hover-translate {
+    transition: transform 0.3s, shadow 0.3s;
+}
+
+.hover-translate:hover {
+    transform: translateY(-10px);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
