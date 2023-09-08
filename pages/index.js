@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import postsData from "../data/blog.json";
-import BlogCard from "./card";
+import BlogCard from "./components/card";
 
 export default function BlogList({ initialPosts }) {
   const [blogs, setBlogs] = useState(initialPosts);
