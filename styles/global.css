@@ -1,15 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .hover-translate {
-    transition: transform 0.3s, shadow 0.3s;
+  transition: transform 0.3s, shadow 0.3s;
 }
 
 .hover-translate:hover {
-    transform: translateY(-10px);
+  transform: translateY(-10px);
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
+}
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
